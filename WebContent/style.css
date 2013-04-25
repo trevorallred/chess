@@ -1,0 +1,68 @@
+#score {
+	margin-left: 50px;
+	float: left;
+}
+
+#board {
+	float: left;
+	border: 5px solid #333;
+	width: 600px;
+	height: 600px;
+	background: #fff;
+	position: relative;
+}
+
+div.space {
+	display: block;
+	font-size: 60px;
+	position: relative;
+	text-decoration: none;
+	cursor: default;
+	float: left;
+	width: 12.5%;
+	height: 12.5%;
+	overflow: hidden;
+	text-align: center;
+	vertical-align: middle;
+}
+
+div.light {
+	background: #fff;
+	background: -moz-linear-gradient(top, #fff, #eee);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#fff), to(#eee) );
+	box-shadow: inset 0 0 0 1px #fff;
+	-moz-box-shadow: inset 0 0 0 1px #fff;
+	-webkit-box-shadow: inset 0 0 0 1px #fff;
+}
+
+div.dark {
+	background: #ccc;
+	background: -moz-linear-gradient(top, #ccc, #eee);
+	background: -webkit-gradient(linear, 0 0, 0 100%, from(#ccc), to(#eee) );
+	box-shadow: inset 0 0 0 1px #ccc;
+	-moz-box-shadow: inset 0 0 0 1px #ccc;
+	-webkit-box-shadow: inset 0 0 0 1px #ccc;
+}
+
+div.moveable {
+	cursor: pointer;
+}
+
+div.selected {
+	background: burlywood;
+}
+
+div.destination {
+	background: olive;
+	cursor: pointer;
+}
+
+div.BlackPiece {
+	color: #000;
+	text-shadow: 1px 1px #fff;
+}
+
+div.WhitePiece {
+	color: wheat;
+	text-shadow: 1px 1px black;
+}
