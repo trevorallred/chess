@@ -17,14 +17,16 @@ public class Board {
 	}
 
 	public void move(Location fromLocation, Location toLocation) throws Exception {
-		Piece piece = getPieceAtLocation(fromLocation);
-		if (piece == null) {
+		Piece attacker = getPieceAtLocation(fromLocation);
+		if (attacker == null) {
 			throw new Exception("No piece found on board at location " + fromLocation);
 		}
-		if (!canPieceMoveTo(piece, toLocation)) {
+		if (!canPieceMoveTo(attacker, toLocation)) {
 			// throw new Exception("Not a valid move to " + toLocation);
 		}
-		piece.setLocation(toLocation);
+		Piece defender = getPieceAtLocation(toLocation);
+		pieces.remove(defender);
+		attacker.setLocation(toLocation);
 	}
 
 	public Piece getPieceAtLocation(Location location) {
@@ -72,7 +74,15 @@ public class Board {
 		return allNextMoves;
 	}
 
-	public Piece getKing(Color color) {
+	public boolean isCheckMated(Color color) {
+		if (!isChecked(color))
+			return false;
+
+		Piece myKing = getKing(color);
+		return myKing.getNextMoves(this).size() == 0;
+	}
+
+	private Piece getKing(Color color) {
 		for (Piece piece : pieces) {
 			if (piece.getColor() == color) {
 				// TODO only return the King
@@ -81,5 +91,17 @@ public class Board {
 		}
 		// This shouldn't happen in a real game
 		return null;
+	}
+
+	private boolean isChecked(Color color) {
+		Piece myKing = getKing(color);
+		for (Piece piece : getPieces()) {
+			if (color != piece.getColor()) {
+				if (canPieceMoveTo(piece, myKing.getLocation())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
