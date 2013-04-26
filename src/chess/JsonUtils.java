@@ -7,14 +7,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import chess.pieces.Bishop;
 import chess.pieces.Color;
-import chess.pieces.King;
-import chess.pieces.Knight;
 import chess.pieces.Piece;
-import chess.pieces.Pawn;
-import chess.pieces.Queen;
-import chess.pieces.Rook;
+import chess.pieces.PieceType;
 
 @SuppressWarnings("unchecked")
 public class JsonUtils {
@@ -41,7 +36,7 @@ public class JsonUtils {
 	private static JSONObject toJsonPiece(Piece piece, Set<Location> nextMoves) {
 		JSONObject json = new JSONObject();
 		json.put(PIECE_COLOR, piece.getColor().toString());
-		json.put(PIECE_TYPE, piece.getClass().getSimpleName());
+		json.put(PIECE_TYPE, piece.getType().toString());
 		json.put(PIECE_LOCATION, toJsonLocation(piece.getLocation()));
 		if (piece.getColor() == Color.White) {
 			json.put(PIECE_NEXT_MOVES, toJson(nextMoves));
@@ -84,29 +79,11 @@ public class JsonUtils {
 	}
 
 	private static Piece createPiece(JSONObject pieceObj, String locationObj) {
-		Piece piece;
-
-		String type = (String) pieceObj.get("type");
+		PieceType type = PieceType.valueOf((String) pieceObj.get("type"));
 		Color color = Color.valueOf((String) pieceObj.get("color"));
-
-		if ("King".equals(type)) {
-			piece = new King(color);
-		} else if ("Queen".equals(type)) {
-			piece = new Queen(color);
-		} else if ("Bishop".equals(type)) {
-			piece = new Bishop(color, File.a);
-		} else if ("Rook".equals(type)) {
-			piece = new Rook(color, File.a);
-		} else if ("Knight".equals(type)) {
-			piece = new Knight(color, File.a);
-		} else {
-			piece = new Pawn(color, File.a);
-		}
 		File file = File.valueOf(locationObj.substring(0, 1));
 		int y = Integer.parseInt(locationObj.substring(1, 2));
-		piece.setLocation(new Location(file, y));
-
-		System.out.println("Created " + piece.toString() + " at " + piece.getLocation());
-		return piece;
+		Location location = new Location(file, y);
+		return new Piece(type, color, location);
 	}
 }

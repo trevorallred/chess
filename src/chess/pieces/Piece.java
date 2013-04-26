@@ -3,32 +3,21 @@ package chess.pieces;
 import java.util.Set;
 
 import chess.Board;
-import chess.File;
 import chess.Location;
 
 public class Piece {
-	protected Color color;
-	protected Location location;
-	protected int value;
+	private Color color;
+	private Location location;
+	private PieceType type;
 
-	protected BasePiece(Color color, Location location) {
-		setDefaults();
-	}
-
-	protected BasePiece(Color color, File x, boolean isPawn) {
-		setDefaults();
+	public Piece(PieceType type, Color color, Location location) {
+		this.type = type;
 		this.color = color;
-		int y = 0;
-		if (isPawn) {
-			y = (this.color == Color.White ? 2 : 7);
-		} else {
-			// All other pieces
-			y = (this.color == Color.White ? 1 : 8);
-		}
-		this.location = new Location(x, y);
+		this.location = location;
 	}
 
-	protected void setDefaults() {
+	public PieceType getType() {
+		return type;
 	}
 
 	public Color getColor() {
@@ -43,20 +32,12 @@ public class Piece {
 		this.location = location;
 	}
 
+	// TODO remove this method
 	public Set<Location> getNextMoves(Board board) {
 		return new PieceMover(board).getNextMoves(this);
 	}
-	
+
 	public Piece clone() {
-		return new BasePiece(color, location);
-	}
-
-	protected void addMove(Set<Location> nextMoves, int x, int y) {
-		if (x == 0 && y == 0)
-			return;
-
-		Location newLocation = new Location(location, x, y);
-		if (newLocation.isValid())
-			nextMoves.add(newLocation);
+		return new Piece(type, color, location);
 	}
 }

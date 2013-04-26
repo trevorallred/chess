@@ -3,14 +3,9 @@ package chess;
 import java.util.HashSet;
 import java.util.Set;
 
-import chess.pieces.Bishop;
 import chess.pieces.Color;
-import chess.pieces.King;
-import chess.pieces.Knight;
 import chess.pieces.Piece;
-import chess.pieces.Pawn;
-import chess.pieces.Queen;
-import chess.pieces.Rook;
+import chess.pieces.PieceType;
 
 public class BoardBuilder {
 
@@ -40,40 +35,28 @@ public class BoardBuilder {
 	}
 
 	private static Piece createPiece(String data, Color color) {
-		Piece piece;
-		String type = data.substring(0, 1);
-
-		if ("K".equals(type)) {
-			piece = new King(color);
-		} else if ("Q".equals(type)) {
-			piece = new Queen(color);
-		} else if ("B".equals(type)) {
-			piece = new Bishop(color, File.a);
-		} else if ("R".equals(type)) {
-			piece = new Rook(color, File.a);
-		} else if ("N".equals(type)) {
-			piece = new Knight(color, File.a);
-		} else {
-			piece = new Pawn(color, File.a);
-		}
+		PieceType type = PieceType.valueOf(data.substring(0, 1));
 		File file = File.valueOf(data.substring(1, 2));
 		int y = Integer.parseInt(data.substring(2, 3));
-		piece.setLocation(new Location(file, y));
-		return piece;
+		Location location = new Location(file, y);
+		return new Piece(type, color, location);
 	}
 
 	private static Set<Piece> addPieces(Color color) {
+		int row1 = (color == Color.White ? 1 : 8);
+		int row2 = (color == Color.White ? 2 : 7);
+		
 		Set<Piece> pieces = new HashSet<Piece>();
-		pieces.add(new King(color));
-		pieces.add(new Queen(color));
-		pieces.add(new Rook(color, File.a));
-		pieces.add(new Rook(color, File.h));
-		pieces.add(new Bishop(color, File.c));
-		pieces.add(new Bishop(color, File.f));
-		pieces.add(new Knight(color, File.b));
-		pieces.add(new Knight(color, File.g));
+		pieces.add(new Piece(PieceType.Rook, color, new Location(File.a, row1)));
+		pieces.add(new Piece(PieceType.Knight, color, new Location(File.b, row1)));
+		pieces.add(new Piece(PieceType.Bishop, color, new Location(File.c, row1)));
+		pieces.add(new Piece(PieceType.Queen, color, new Location(File.d, row1)));
+		pieces.add(new Piece(PieceType.King, color, new Location(File.e, row1)));
+		pieces.add(new Piece(PieceType.Bishop, color, new Location(File.f, row1)));
+		pieces.add(new Piece(PieceType.Knight, color, new Location(File.g, row1)));
+		pieces.add(new Piece(PieceType.Rook, color, new Location(File.h, row1)));
 		for (File x : File.values()) {
-			pieces.add(new Pawn(color, x));
+			pieces.add(new Piece(PieceType.Pawn, color, new Location(x, row2)));
 		}
 		return pieces;
 	}

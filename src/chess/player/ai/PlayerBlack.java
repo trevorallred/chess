@@ -26,10 +26,26 @@ public class PlayerBlack implements Player {
 		}
 		for (Piece piece : board.getPieces()) {
 			if (color == piece.getColor()) {
-				score += 1;
+				score += getPieceValue(piece);
 			}
 		}
 		return score;
+	}
+
+	private int getPieceValue(Piece piece) {
+		switch (piece.getType()) {
+		case King:
+			return 7;
+		case Queen:
+			return 27;
+		case Bishop:
+			return 7;
+		case Rook:
+			return 14;
+		case Knight:
+			return 8;
+		}
+		return 2;
 	}
 
 	// Should we move this to the Board class?
