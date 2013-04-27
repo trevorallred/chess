@@ -14,6 +14,8 @@ public enum PieceType {
 	}
 
 	public String getInitial() {
+		if (initial == null)
+			return this.toString().substring(0, 1);
 		return initial;
 	}
 

@@ -9,7 +9,9 @@ import org.json.simple.JSONValue;
 
 import chess.pieces.Color;
 import chess.pieces.Piece;
+import chess.pieces.PieceMover;
 import chess.pieces.PieceType;
+import chess.player.Move;
 
 @SuppressWarnings("unchecked")
 public class JsonUtils {
@@ -25,7 +27,8 @@ public class JsonUtils {
 	private static final String MOVE_TO = "to";
 
 	public static JSONArray toJson(Board board) {
-		Map<Piece, Set<Location>> nextMoves = board.getNextMoves();
+		PieceMover mover = new PieceMover(board);
+		Map<Piece, Set<Location>> nextMoves = mover.getNextMoves(Color.White);
 		JSONArray json = new JSONArray();
 		for (Piece piece : board.getPieces()) {
 			json.add(toJsonPiece(piece, nextMoves.get(piece)));
@@ -74,7 +77,10 @@ public class JsonUtils {
 		JSONObject move = (JSONObject) jsonObj.get(MOVE);
 		Location fromLocation = new Location((String) move.get(MOVE_FROM));
 		Location toLocation = new Location((String) move.get(MOVE_TO));
-		board.move(fromLocation, toLocation);
+
+		PieceMover mover = new PieceMover(board);
+		Move moveObj = new Move(fromLocation, toLocation);
+		mover.move(moveObj);
 		return board;
 	}
 

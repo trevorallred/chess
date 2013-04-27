@@ -1,8 +1,5 @@
 package chess.pieces;
 
-import java.util.Set;
-
-import chess.Board;
 import chess.Location;
 
 public class Piece {
@@ -30,14 +27,18 @@ public class Piece {
 
 	public void setLocation(Location location) {
 		this.location = location;
-	}
-
-	// TODO remove this method
-	public Set<Location> getNextMoves(Board board) {
-		return new PieceMover(board).getNextMoves(this);
+		if (type == PieceType.Pawn) {
+			if (location.getY() == color.getLastRow()) {
+				type = PieceType.Queen;
+			}
+		}
 	}
 
 	public Piece clone() {
 		return new Piece(type, color, location);
+	}
+	
+	public String toString() {
+		return color.toString().charAt(0) + type.getInitial();
 	}
 }

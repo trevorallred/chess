@@ -7,7 +7,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import chess.pieces.Color;
 import chess.pieces.Piece;
+import chess.pieces.PieceMover;
 
 public class BoardTest {
 
@@ -23,8 +25,9 @@ public class BoardTest {
 		Board board = BoardBuilder.startNew();
 
 		System.out.println(BoardPrinter.print(board));
-
-		Map<Piece, Set<Location>> nextMoves = board.getNextMoves();
+		
+		PieceMover mover = new PieceMover(board);
+		Map<Piece, Set<Location>> nextMoves = mover.getNextMoves(Color.White);
 
 		for (Piece piece : nextMoves.keySet()) {
 			System.out.println(piece.toString() + piece.getLocation().toString());
@@ -32,6 +35,6 @@ public class BoardTest {
 				System.out.println("     " + toLocation);
 			}
 		}
-		assertEquals(14, nextMoves.size());
+		assertEquals(10, nextMoves.size());
 	}
 }

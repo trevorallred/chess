@@ -18,4 +18,8 @@ public class Move {
 	public Location getTo() {
 		return to;
 	}
+
+	public String toString() {
+		return from.toString() + to.toString();
+	}
 }

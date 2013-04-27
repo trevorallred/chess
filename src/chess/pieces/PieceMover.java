@@ -1,17 +1,55 @@
 package chess.pieces;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import chess.Board;
 import chess.Location;
+import chess.player.Move;
 
 public class PieceMover {
 	private Board board;
 
 	public PieceMover(Board board) {
 		this.board = board;
+	}
+
+	public void move(Move move) throws Exception {
+		Piece attacker = board.getPieceAtLocation(move.getFrom());
+		if (attacker == null) {
+			throw new Exception("No piece found on board at location " + move.getFrom());
+		}
+		if (!canPieceMoveTo(attacker, move.getTo())) {
+			throw new Exception("Not a valid move to " + move.getTo());
+		}
+		Piece defender = board.getPieceAtLocation(move.getTo());
+		board.kill(defender);
+		attacker.setLocation(move.getTo());
+	}
+
+	private boolean canPieceMoveTo(Piece piece, Location toLocation) {
+		Set<Location> nextMoves = getNextMoves(piece);
+		for (Location location : nextMoves) {
+			if (toLocation.equals(location))
+				return true;
+		}
+		return nextMoves.contains(toLocation);
+	}
+
+	public Map<Piece, Set<Location>> getNextMoves(Color color) {
+		Map<Piece, Set<Location>> allNextMoves = new HashMap<Piece, Set<Location>>();
+		for (Piece piece : board.getPieces()) {
+			if (piece.getColor() == color) {
+				Set<Location> nextMoves = getNextMoves(piece);
+				if (nextMoves.size() > 0) {
+					allNextMoves.put(piece, nextMoves);
+				}
+			}
+		}
+		return allNextMoves;
 	}
 
 	public Set<Location> getNextMoves(Piece piece) {
@@ -39,20 +77,76 @@ public class PieceMover {
 			}
 			break;
 		case Knight:
-			// TODO
-			nextMoves.add(new Location(piece.getLocation(), 1, 2));
+			addKnightMove(piece, nextMoves, 1, 2);
+			addKnightMove(piece, nextMoves, 1, -2);
+			addKnightMove(piece, nextMoves, -1, 2);
+			addKnightMove(piece, nextMoves, -1, -2);
+			addKnightMove(piece, nextMoves, 2, 1);
+			addKnightMove(piece, nextMoves, 2, -1);
+			addKnightMove(piece, nextMoves, -2, 1);
+			addKnightMove(piece, nextMoves, -2, -1);
 			break;
 		case Pawn:
-			int direction = (piece.getColor() == Color.White ? 1 : -1);
-			if (nextMoves.add(new Location(piece.getLocation(), 0, 1 * direction))) {
-				nextMoves.add(new Location(piece.getLocation(), 0, 2 * direction));
-			}
+			moveForward(piece, nextMoves);
+			attackWithPawn(piece, nextMoves, Direction.TopRight);
+			attackWithPawn(piece, nextMoves, Direction.TopLeft);
 			break;
 		}
 
 		removeInvalidMoves(nextMoves);
 
 		return nextMoves;
+	}
+
+	private void addKnightMove(Piece piece, Set<Location> nextMoves, int x, int y) {
+		if (!canKnightStep(piece, x, y)) {
+			return;
+		}
+
+		Location nextLocation = new Location(piece.getLocation(), x, y);
+		if (whatIsAtLocation(piece.getColor(), nextLocation) == PieceTypeAtLocation.Friend) {
+			return;
+		}
+		nextMoves.add(nextLocation);
+	}
+
+	private boolean canKnightStep(Piece piece, int x, int y) {
+		Location stepLocation = new Location(piece.getLocation(), x, 0);
+		PieceTypeAtLocation whatIsAtStep = whatIsAtLocation(piece.getColor(), stepLocation);
+		if (whatIsAtStep == PieceTypeAtLocation.Empty) {
+			return true;
+		}
+		// Can I go the other way?
+		stepLocation = new Location(piece.getLocation(), 0, y);
+		whatIsAtStep = whatIsAtLocation(piece.getColor(), stepLocation);
+		if (whatIsAtStep == PieceTypeAtLocation.Empty) {
+			return true;
+		}
+		return false;
+	}
+
+	private void attackWithPawn(Piece piece, Set<Location> nextMoves, Direction direction) {
+		int directionX = direction.getX(piece.getColor());
+		int directionY = direction.getY(piece.getColor());
+		Location nextLocation = new Location(piece.getLocation(), directionX, directionY);
+		if (whatIsAtLocation(piece.getColor(), nextLocation) == PieceTypeAtLocation.Foe) {
+			nextMoves.add(nextLocation);
+		}
+	}
+
+	private void moveForward(Piece piece, Set<Location> nextMoves) {
+		int directionY = Direction.Up.getY(piece.getColor());
+		Location nextLocation = new Location(piece.getLocation(), 0, directionY);
+		if (whatIsAtLocation(piece.getColor(), nextLocation) == PieceTypeAtLocation.Empty) {
+			if (nextMoves.add(nextLocation)) {
+				if (piece.getLocation().getY() == piece.getColor().getSecondRow()) {
+					Location secondLocation = new Location(piece.getLocation(), 0, 2 * directionY);
+					if (whatIsAtLocation(piece.getColor(), secondLocation) == PieceTypeAtLocation.Empty) {
+						nextMoves.add(secondLocation);
+					}
+				}
+			}
+		}
 	}
 
 	private void removeInvalidMoves(Set<Location> nextMoves) {
@@ -113,15 +207,15 @@ public class PieceMover {
 		Piece target = board.getPieceAtLocation(location);
 
 		if (target == null) {
-			System.out.println("No piece at " + location);
+			// System.out.println("No piece at " + location);
 			return PieceTypeAtLocation.Empty;
 		}
 
 		if (friendColor == target.getColor()) {
-			System.out.println("Team mate " + target + " at " + location);
+			// System.out.println("Team mate " + target + " at " + location);
 			return PieceTypeAtLocation.Friend;
 		} else {
-			System.out.println("Opponent " + target + " at " + location);
+			// System.out.println("Opponent " + target + " at " + location);
 			return PieceTypeAtLocation.Foe;
 		}
 	}
@@ -158,5 +252,34 @@ public class PieceMover {
 			directions.add(Direction.Left);
 			return directions;
 		}
+
+		int getX(Color color) {
+			return color == Color.White ? x : x * -1;
+		}
+
+		int getY(Color color) {
+			return color == Color.White ? y : y * -1;
+		}
 	}
+
+	public boolean isCheckMated(Color color) {
+		if (!isChecked(color))
+			return false;
+
+		Piece king = board.getKing(color);
+		return getNextMoves(king).size() == 0;
+	}
+
+	private boolean isChecked(Color color) {
+		Piece king = board.getKing(color);
+		for (Piece piece : board.getPieces()) {
+			if (color != piece.getColor()) {
+				if (canPieceMoveTo(piece, king.getLocation())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }

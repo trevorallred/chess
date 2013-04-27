@@ -35,7 +35,7 @@ public class BoardBuilder {
 	}
 
 	private static Piece createPiece(String data, Color color) {
-		PieceType type = PieceType.valueOf(data.substring(0, 1));
+		PieceType type = PieceType.getType(data.substring(0, 1));
 		File file = File.valueOf(data.substring(1, 2));
 		int y = Integer.parseInt(data.substring(2, 3));
 		Location location = new Location(file, y);

@@ -2,6 +2,8 @@ package chess;
 
 import org.json.simple.JSONObject;
 
+import chess.pieces.Color;
+import chess.pieces.PieceMover;
 import chess.player.Move;
 import chess.player.Player;
 import chess.player.ai.PlayerBlack;
@@ -9,6 +11,7 @@ import chess.player.ai.PlayerBlack;
 public class GameController {
 
 	private Board board;
+	private PieceMover mover;
 	private String errorMessage;
 	private Player opponent;
 
@@ -17,6 +20,7 @@ public class GameController {
 		opponent = new PlayerBlack();
 		try {
 			board = BoardBuilder.move(json);
+			mover = new PieceMover(board);
 			opponentTurn();
 		} catch (Exception e) {
 			board = null;
@@ -25,8 +29,8 @@ public class GameController {
 	}
 
 	private void opponentTurn() throws Exception {
-		Move move = opponent.suggestMove(board);
-		board.move(move.getFrom(), move.getTo());
+		Move move = opponent.suggestMove(board, Color.Black);
+		mover.move(move);
 	}
 
 	@SuppressWarnings("unchecked")
