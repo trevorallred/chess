@@ -99,30 +99,11 @@ public class PieceMover {
 	}
 
 	private void addKnightMove(Piece piece, Set<Location> nextMoves, int x, int y) {
-		if (!canKnightStep(piece, x, y)) {
-			return;
-		}
-
 		Location nextLocation = new Location(piece.getLocation(), x, y);
 		if (whatIsAtLocation(piece.getColor(), nextLocation) == PieceTypeAtLocation.Friend) {
 			return;
 		}
 		nextMoves.add(nextLocation);
-	}
-
-	private boolean canKnightStep(Piece piece, int x, int y) {
-		Location stepLocation = new Location(piece.getLocation(), x, 0);
-		PieceTypeAtLocation whatIsAtStep = whatIsAtLocation(piece.getColor(), stepLocation);
-		if (whatIsAtStep == PieceTypeAtLocation.Empty) {
-			return true;
-		}
-		// Can I go the other way?
-		stepLocation = new Location(piece.getLocation(), 0, y);
-		whatIsAtStep = whatIsAtLocation(piece.getColor(), stepLocation);
-		if (whatIsAtStep == PieceTypeAtLocation.Empty) {
-			return true;
-		}
-		return false;
 	}
 
 	private void attackWithPawn(Piece piece, Set<Location> nextMoves, Direction direction) {
