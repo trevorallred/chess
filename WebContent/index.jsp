@@ -9,7 +9,7 @@
 	<div id="score">
 		<button id="startGame">Start New Game</button>
 		<h1>ScoreBoard</h1>
-		White: Black:
+		<div></div>
 	</div>
 	<script src="chess.js" type="text/javascript"></script>
 </body>
