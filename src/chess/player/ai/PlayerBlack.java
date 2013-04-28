@@ -1,9 +1,7 @@
 package chess.player.ai;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import chess.Board;
 import chess.BoardPrinter;
@@ -28,10 +26,8 @@ public class PlayerBlack implements Player {
 	private Move startAnalysis() {
 		System.out.println(BoardPrinter.print(board));
 		PieceMover mover = new PieceMover(board);
-		int whiteBefore = score(board, Color.White);
-		// int blackBefore = score(board, Color.Black);
+		int scoreBefore = score(board);
 
-		Map<String, Move> moves = new HashMap<String, Move>();
 		List<Move> bestMoves = new ArrayList<Move>();
 		int bestScore = -100000;
 		for (Piece piece : board.getPieces()) {
@@ -40,43 +36,59 @@ public class PlayerBlack implements Player {
 					try {
 						System.out.println("Simulating moves for " + piece + " to " + target);
 						Move move = new Move(piece.getLocation(), target);
-						Board simulation = board.clone();
-						PieceMover simulator = new PieceMover(simulation);
-						simulator.move(move);
-						int whiteAfter = score(simulation, Color.White);
-						// int blackAfter = score(simulation, Color.Black);
+						Board simulation = simulateMovingPiece(move);
+						System.out.println(BoardPrinter.print(simulation));
+						int damage = scoreBefore - score(simulation);
 
-						int damage = whiteBefore - whiteAfter;
 						if (damage > bestScore) {
 							bestScore = damage;
 							bestMoves.clear();
 						}
+
 						if (damage == bestScore) {
 							bestMoves.add(move);
 						}
-						System.out.println("damageDone = " + damage);
 
 					} catch (Exception e) {
 					}
 				}
 			}
 		}
+		return pickBestMove(bestMoves);
+	}
+
+	private Board simulateMovingPiece(Move move) throws Exception {
+		Board simulation = board.clone();
+		PieceMover simulator = new PieceMover(simulation);
+		simulator.move(move);
+		return simulation;
+	}
+
+	private static Move pickBestMove(List<Move> bestMoves) {
 		if (bestMoves.size() == 0)
 			return null;
-		// TODO Randomize
-		return bestMoves.get(0); 
+		if (bestMoves.size() == 1)
+			return bestMoves.get(0);
+		int randomMove = (int) Math.floor(Math.random() * bestMoves.size());
+		return bestMoves.get(randomMove);
 	}
 
 	private boolean isFriend(Piece piece) {
 		return piece.getColor() == myColor;
 	}
 
+	private static int score(Board board) {
+		return score(board, Color.White) - score(board, Color.Black);
+	}
+
 	static public int score(Board board, Color color) {
 		int score = 0;
 
-		// if (board.isCheckMated(color)) {
-		// return -1;
-		// }
+		PieceMover mover = new PieceMover(board);
+
+		if (mover.isChecked(color)) {
+			score -= 100;
+		}
 		for (Piece piece : board.getPieces()) {
 			if (color == piece.getColor()) {
 				score += getPieceValue(piece);
@@ -88,17 +100,19 @@ public class PlayerBlack implements Player {
 	static private int getPieceValue(Piece piece) {
 		switch (piece.getType()) {
 		case King:
-			return 7;
+			return 40;
 		case Queen:
-			return 27;
+			return 9;
 		case Bishop:
-			return 7;
+			return 3;
 		case Rook:
-			return 14;
+			return 5;
 		case Knight:
-			return 8;
+			return 3;
+		case Pawn:
+			return 1;
 		}
-		return 2;
+		return 1;
 	}
 
 }

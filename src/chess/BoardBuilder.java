@@ -9,11 +9,26 @@ import chess.pieces.PieceType;
 
 public class BoardBuilder {
 
-	public static Board startNew() {
-		Board board = new Board();
+	Board board = new Board();
+
+	static public BoardBuilder build() {
+		return new BoardBuilder();
+	}
+
+	public BoardBuilder addWhite(String pieces) {
+		board.getPieces().addAll(parsePieces(pieces, Color.White));
+		return this;
+	}
+
+	public BoardBuilder addBlack(String pieces) {
+		board.getPieces().addAll(parsePieces(pieces, Color.Black));
+		return this;
+	}
+
+	public BoardBuilder addAll() {
 		board.getPieces().addAll(addPieces(Color.White));
 		board.getPieces().addAll(addPieces(Color.Black));
-		return board;
+		return this;
 	}
 
 	public static Board build(String whitePieces, String blackPieces) {
@@ -45,7 +60,7 @@ public class BoardBuilder {
 	private static Set<Piece> addPieces(Color color) {
 		int row1 = (color == Color.White ? 1 : 8);
 		int row2 = (color == Color.White ? 2 : 7);
-		
+
 		Set<Piece> pieces = new HashSet<Piece>();
 		pieces.add(new Piece(PieceType.Rook, color, new Location(File.a, row1)));
 		pieces.add(new Piece(PieceType.Knight, color, new Location(File.b, row1)));
@@ -61,7 +76,7 @@ public class BoardBuilder {
 		return pieces;
 	}
 
-	public static Board move(String json) throws Exception {
-		return JsonUtils.fromJson(json);
+	public Board getBoard() {
+		return board;
 	}
 }

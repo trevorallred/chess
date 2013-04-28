@@ -251,8 +251,12 @@ public class PieceMover {
 		return getNextMoves(king).size() == 0;
 	}
 
-	private boolean isChecked(Color color) {
+	public boolean isChecked(Color color) {
 		Piece king = board.getKing(color);
+		if (king == null) {
+			// LOL...the king can't be in check if it's not on the board.
+			return false;
+		}
 		for (Piece piece : board.getPieces()) {
 			if (color != piece.getColor()) {
 				if (canPieceMoveTo(piece, king.getLocation())) {

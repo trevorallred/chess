@@ -33,7 +33,7 @@ public class Board {
 				return piece;
 			}
 		}
-		// This shouldn't happen in a real game
+		System.out.println("Warning!! For some reason, the " + color + " king doesn't exist on the board");
 		return null;
 	}
 

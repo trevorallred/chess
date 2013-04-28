@@ -10,7 +10,7 @@ public class JsonUtilsTest {
 	@Test
 	@Ignore
 	public void testBoardJson() throws Exception {
-		Board board = BoardBuilder.startNew();
+		Board board = BoardBuilder.build().addAll().getBoard();
 		String expectedString = "{\"f7\":\"B:P\",\"f8\":\"B:B\",\"h8\":\"B:R\",\"b2\":\"W:P\",\"d8\":\"B:Q\","
 				+ "\"b7\":\"B:P\",\"d7\":\"B:P\",\"b8\":\"B:N\",\"d1\":\"W:Q\",\"d2\":\"W:P\",\"b1\":\"W:N\","
 				+ "\"a1\":\"W:R\",\"a2\":\"W:P\",\"f1\":\"W:B\",\"h7\":\"B:P\",\"h1\":\"W:R\",\"f2\":\"W:P\","

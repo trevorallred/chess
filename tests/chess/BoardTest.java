@@ -15,14 +15,14 @@ public class BoardTest {
 
 	@Test
 	public void testStartNew() throws Exception {
-		Board board = BoardBuilder.startNew();
+		Board board = BoardBuilder.build().addAll().getBoard();
 
 		assertEquals(32, board.getPieces().size());
 	}
 
 	@Test
 	public void testPossibleWhiteMoves_AfterStart() throws Exception {
-		Board board = BoardBuilder.startNew();
+		Board board = BoardBuilder.build().addAll().getBoard();
 
 		System.out.println(BoardPrinter.print(board));
 		

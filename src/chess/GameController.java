@@ -19,7 +19,7 @@ public class GameController {
 		// We could inject the Opponent Player here
 		opponent = new PlayerBlack();
 		try {
-			board = BoardBuilder.move(json);
+			board = JsonUtils.fromJson(json);
 			mover = new PieceMover(board);
 			opponentTurn();
 		} catch (Exception e) {

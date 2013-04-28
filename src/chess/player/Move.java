@@ -20,6 +20,6 @@ public class Move {
 	}
 
 	public String toString() {
-		return from.toString() + to.toString();
+		return from.toString() + "->" + to.toString();
 	}
 }
