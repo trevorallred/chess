@@ -1,2 +1,2 @@
 <%@page import="chess.*"%>
-<% Board board = BoardBuilder.startNew(); %><%= JsonUtils.toJson(board) %>
+<% Board board = BoardBuilder.build().addAll().getBoard(); %><%= JsonUtils.toJson(board) %>
