@@ -5,7 +5,7 @@ import chess.pieces.Piece;
 public class BoardPrinter {
 
 	public static String print(Board board) {
-		String output = "";
+		String output = "\n";
 		for (int y = 9; y >= 0; y--) {
 			output = printSideNumbers(output, y);
 			for (File x : File.values()) {

@@ -5,8 +5,7 @@ import org.json.simple.JSONObject;
 import chess.pieces.Color;
 import chess.pieces.PieceMover;
 import chess.player.Move;
-import chess.player.Player;
-import chess.player.ai.PlayerBlack;
+import chess.player.ai.Player;
 
 public class GameController {
 
@@ -17,7 +16,7 @@ public class GameController {
 
 	public GameController(String json) {
 		// We could inject the Opponent Player here
-		opponent = new PlayerBlack();
+		opponent = new Player(Color.Black);
 		try {
 			board = JsonUtils.fromJson(json);
 			mover = new PieceMover(board);
@@ -29,7 +28,7 @@ public class GameController {
 	}
 
 	private void opponentTurn() throws Exception {
-		Move move = opponent.suggestMove(board, Color.Black);
+		Move move = opponent.suggestMove(board);
 		mover.move(move);
 	}
 

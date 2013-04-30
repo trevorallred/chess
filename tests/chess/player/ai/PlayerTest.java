@@ -4,14 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import chess.BoardBuilder;
 import chess.pieces.Color;
 import chess.player.Move;
-import chess.player.Player;
 
-public class PlayerBlackTest {
+public class PlayerTest {
 
 	private BoardBuilder builder;
 
@@ -21,32 +21,33 @@ public class PlayerBlackTest {
 	}
 
 	@Test
+	@Ignore
 	public void testNextPawnMove() throws Exception {
 		builder.addWhite("Pd3").addBlack("Pd6");
-		assertMove("d6", "d5", suggestBlackMove());
+		assertMove("d6", "d5", suggestBlackMove(1));
 	}
 
-	// @Test
-	// public void testQueen_BadMove() throws Exception {
-	// builder.addWhite("Ke1,Pd2").addBlack("Ke8,Qd8");
-	// assertBadMove("d8", "d2", suggestBlackMove());
-	// }
+	@Test
+	public void testQueen_BadMove() throws Exception {
+		builder.addWhite("Ke1,Pd2").addBlack("Ke8,Qd8");
+		assertBadMove("d8", "d2", suggestBlackMove(1));
+	}
 
 	@Test
 	public void testKing_OutOfCheck() throws Exception {
 		builder.addWhite("Ka8,Rb8,Rf6").addBlack("Kh8,Pg7");
-		assertMove("h8", "h7", suggestBlackMove());
+		assertMove("h8", "h7", suggestBlackMove(2));
 	}
 
 	@Test
 	public void testRook_Kill() throws Exception {
 		builder.addWhite("Ka8,Rb8,Rf6").addBlack("Kh8,Pg7");
-		assertMove("h8", "h7", suggestBlackMove());
+		assertMove("h8", "h7", suggestBlackMove(1));
 	}
 
-	private Move suggestBlackMove() {
-		Player player = new PlayerBlack();
-		return player.suggestMove(builder.getBoard(), Color.Black);
+	private Move suggestBlackMove(int intelligence) {
+		Player player = new Player(Color.Black, intelligence);
+		return player.suggestMove(builder.getBoard());
 	}
 
 	private static void assertBadMove(String expectedFrom, String expectedTo, Move actualMove) {

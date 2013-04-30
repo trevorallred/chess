@@ -14,4 +14,8 @@ public enum Color {
 	public int getLastRow() {
 		return (this == Black ? 1 : 8);
 	}
+
+	public Color getOpposite() {
+		return (this == White ? Black : White);
+	}
 }
