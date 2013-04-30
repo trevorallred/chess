@@ -3,11 +3,16 @@ package chess;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import chess.pieces.Color;
 import chess.pieces.Piece;
 import chess.pieces.PieceType;
 
 public class BoardBuilder {
+
+	Logger logger = LoggerFactory.getLogger(BoardBuilder.class);
 
 	Board board = new Board();
 

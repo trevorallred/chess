@@ -3,11 +3,16 @@ package chess;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import chess.pieces.Color;
 import chess.pieces.Piece;
 import chess.pieces.PieceType;
 
 public class Board {
+	Logger logger = LoggerFactory.getLogger(Board.class);
+
 	private Set<Piece> pieces = new HashSet<Piece>();
 
 	public Set<Piece> getPieces() {
@@ -33,7 +38,7 @@ public class Board {
 				return piece;
 			}
 		}
-		System.out.println("Warning!! For some reason, the " + color + " king doesn't exist on the board");
+		logger.warn("For some reason, the {} king doesn't exist", color);
 		return null;
 	}
 
@@ -43,5 +48,9 @@ public class Board {
 			board.getPieces().add(piece.clone());
 		}
 		return board;
+	}
+
+	public void log() {
+		logger.debug(BoardPrinter.print(this));
 	}
 }
