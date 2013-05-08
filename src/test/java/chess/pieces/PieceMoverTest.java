@@ -32,6 +32,14 @@ public class PieceMoverTest {
 	}
 
 	@Test
+	public void testCheck() throws Exception {
+		builder.addWhite("Ka1");
+		builder.addBlack("Qf2");
+		builder.getBoard().log();
+		assertNextMoves("a1", 1);
+	}
+
+	@Test
 	public void testKnight() throws Exception {
 		builder.addWhite("Nd4");
 		assertNextMoves("d4", 8);

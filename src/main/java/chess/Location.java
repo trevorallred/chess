@@ -53,6 +53,9 @@ public class Location implements Comparable<Location> {
 
 	@Override
 	public String toString() {
+		if (!isValid()) {
+			return "off board";
+		}
 		return x.toString() + y;
 	}
 

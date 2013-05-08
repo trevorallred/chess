@@ -6,11 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import chess.Board;
 import chess.Location;
 import chess.player.Move;
 
 public class PieceMover {
+	Logger logger = LoggerFactory.getLogger(PieceMover.class);
+	
 	private Board board;
 
 	public PieceMover(Board board) {
@@ -134,10 +139,19 @@ public class PieceMover {
 		Iterator<Location> iterator = nextMoves.iterator();
 		while (iterator.hasNext()) {
 			Location location = iterator.next();
+			logger.debug("location " + location);
 			if (location == null || !location.isValid()) {
 				iterator.remove();
 			}
+			if (kingIsCheckMatedAfterMove()) {
+				iterator.remove();
+			}
 		}
+	}
+
+	private boolean kingIsCheckMatedAfterMove() {
+		// TODO
+		return false;
 	}
 
 	private Set<Location> move(Piece piece, Direction direction) {

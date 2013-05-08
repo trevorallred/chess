@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import chess.BoardBuilder;
+import chess.Location;
 import chess.pieces.Color;
 import chess.player.Move;
 
@@ -21,7 +22,6 @@ public class PlayerTest {
 	}
 
 	@Test
-	@Ignore
 	public void testNextPawnMove() throws Exception {
 		builder.addWhite("Pd3").addBlack("Pd6");
 		assertMove("d6", "d5", suggestBlackMove(1));
@@ -52,8 +52,8 @@ public class PlayerTest {
 
 	private static void assertBadMove(String expectedFrom, String expectedTo, Move actualMove) {
 		String msg = actualMove.toString() + " is considered a bad move";
-		assertFalse(msg, expectedFrom.equals(actualMove.getFrom().toString()));
-		assertFalse(msg, expectedTo.equals(actualMove.getTo().toString()));
+		Move badMove = new Move(new Location(expectedFrom), new Location(expectedTo));
+		assertFalse(msg, badMove.equals(actualMove));
 	}
 
 	private static void assertMove(String expectedFrom, String expectedTo, Move actualMove) {

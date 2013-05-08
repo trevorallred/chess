@@ -19,7 +19,8 @@ public class Player {
 
 	private Board board;
 	private Color color = Color.Black;
-	private int intelligence = 3;
+	private int intelligence = 2;
+	private String previousSequence = "";
 
 	public Player(Color color) {
 		this.color = color;
@@ -35,13 +36,18 @@ public class Player {
 		return startAnalysis();
 	}
 
+	public Move suggestMove(Board board, String previousSequence) {
+		this.previousSequence = previousSequence;
+		this.board = board;
+		return startAnalysis();
+	}
+
 	private Move startAnalysis() {
 		logger.debug("Starting Analysis for {} with Level {} Intelligence", color, intelligence);
+		int scoreBefore = score(board);
+		logger.debug("with starting score = {}", scoreBefore);
 		board.log();
 		PieceMover mover = new PieceMover(board);
-		int scoreBefore = score(board);
-
-		Player opponent = new Player(color.getOpposite(), intelligence - 1);
 
 		List<Move> bestMoves = new ArrayList<Move>();
 		int bestScore = -100000;
@@ -49,30 +55,14 @@ public class Player {
 			if (isFriend(piece)) {
 				for (Location target : mover.getNextMoves(piece)) {
 					try {
-						logger.debug("Simulating moves for {} to {}", piece, target);
-						int damage = 0;
-						Move move = new Move(piece.getLocation(), target);
-						Board simulation;
-						{
-							simulation = board.clone();
-							PieceMover simulator = new PieceMover(simulation);
-							simulator.move(move);
-							if (simulator.isChecked(color)) {
-								logger.debug("The {} King can't move into or remain in Check", color);
-								break;
-							}
-							simulation.log();
-							damage = scoreBefore - score(simulation);
+						int damage = tryAnalysis(piece, target, bestMoves) - scoreBefore;
+						if (damage > 0) {
+							logger.debug("Found a GOOD move {}", damage);
+						} else if (damage < 0) {
+							logger.debug("Found a BAD move {}", damage);
+						} else {
+							logger.debug("Found no change in score");
 						}
-
-						if (intelligence > 0) {
-							Move counterMove = opponent.suggestMove(simulation);
-							Board counterSimulation = simulation.clone();
-							PieceMover simulator = new PieceMover(counterSimulation);
-							simulator.move(counterMove);
-							damage = scoreBefore - score(counterSimulation);
-						}
-						logger.debug("Calculated a change in score of {}", damage);
 
 						if (damage > bestScore) {
 							bestScore = damage;
@@ -80,9 +70,8 @@ public class Player {
 						}
 
 						if (damage == bestScore) {
-							bestMoves.add(move);
+							bestMoves.add(new Move(piece.getLocation(), target));
 						}
-
 					} catch (Exception e) {
 						logger.debug(e.getMessage());
 					}
@@ -90,6 +79,38 @@ public class Player {
 			}
 		}
 		return pickBestMove(bestMoves);
+	}
+
+	private int tryAnalysis(Piece piece, Location target, List<Move> bestMoves) throws Exception {
+		logger.debug("Simulating moves from " + previousSequence + "{} to {}", piece, target);
+		Move move = new Move(piece.getLocation(), target);
+		Board simulation;
+		{
+			simulation = board.clone();
+			PieceMover simulator = new PieceMover(simulation);
+			simulator.move(move);
+			if (simulator.isChecked(color)) {
+				logger.debug("The {} King can't move into or remain in Check", color);
+				return -1000;
+			}
+			// simulation.log();
+		}
+
+		if (intelligence > 0) {
+			Player opponent = new Player(color.getOpposite(), intelligence - 1);
+			Move counterMove = opponent.suggestMove(simulation, nextSequenceName(piece, move));
+			Board counterSimulation = simulation.clone();
+			PieceMover simulator = new PieceMover(counterSimulation);
+			simulator.move(counterMove);
+			int score = score(counterSimulation);
+			return score;
+		}
+
+		return score(simulation);
+	}
+
+	private String nextSequenceName(Piece piece, Move move) {
+		return previousSequence + piece + "(" + move + ") then ";
 	}
 
 	private Move pickBestMove(List<Move> bestMoves) {

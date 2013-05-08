@@ -21,7 +21,6 @@ div.space {
 	float: left;
 	width: 12.5%;
 	height: 12.5%;
-	overflow: hidden;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -65,4 +64,9 @@ div.BlackPiece {
 div.WhitePiece {
 	color: wheat;
 	text-shadow: 1px 1px black;
+}
+
+div.piece {
+	position: relative;
+	z-index: 1000;
 }

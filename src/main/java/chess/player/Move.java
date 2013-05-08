@@ -22,4 +22,16 @@ public class Move {
 	public String toString() {
 		return from.toString() + "->" + to.toString();
 	}
+
+	public boolean equals(Move obj) {
+		if (obj == null)
+			return false;
+		if (obj == this)
+			return true;
+		
+		Move o = (Move) obj;
+		if (!o.getFrom().equals(this.getFrom()))
+			return false;
+		return o.getTo().equals(this.getTo());
+	}
 }
