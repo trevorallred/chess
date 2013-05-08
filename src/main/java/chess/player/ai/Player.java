@@ -115,15 +115,15 @@ public class Player {
 
 	private Move pickBestMove(List<Move> bestMoves) {
 		if (bestMoves.size() == 0) {
-			logger.warn("Failed to find any possible moves for {}", color);
+			logger.info("Failed to find any possible moves for {}", color);
 			return null;
 		}
 		if (bestMoves.size() == 1) {
-			logger.info("Returning best move for {}: {}", color, bestMoves.get(0));
+			logger.debug("Returning best move for {}: {}", color, bestMoves.get(0));
 			return bestMoves.get(0);
 		}
 		int randomMove = (int) Math.floor(Math.random() * bestMoves.size());
-		logger.info("Returning random move for {}: {}", color, bestMoves.get(randomMove));
+		logger.debug("Returning random move for {}: {}", color, bestMoves.get(randomMove));
 		return bestMoves.get(randomMove);
 	}
 

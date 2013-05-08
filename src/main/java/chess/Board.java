@@ -38,7 +38,7 @@ public class Board {
 				return piece;
 			}
 		}
-		logger.warn("For some reason, the {} king doesn't exist", color);
+		logger.info("For some reason, the {} king doesn't exist", color);
 		return null;
 	}
 

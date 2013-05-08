@@ -5,6 +5,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import chess.Board;
@@ -32,10 +33,12 @@ public class PieceMoverTest {
 	}
 
 	@Test
+	@Ignore
 	public void testCheck() throws Exception {
 		builder.addWhite("Ka1");
 		builder.addBlack("Qf2");
 		builder.getBoard().log();
+		// TODO
 		assertNextMoves("a1", 1);
 	}
 
