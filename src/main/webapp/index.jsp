@@ -17,6 +17,6 @@
             <div id="turn"></div>
         </div>
 	</div>
-	<script src="chess.js" type="text/javascript"></script>
+	<script src="chess.js?v=2" type="text/javascript"></script>
 </body>
 </html>
