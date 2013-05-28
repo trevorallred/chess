@@ -3,9 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.trevorallred</groupId>
 	<artifactId>chess</artifactId>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<version>0.1-SNAPSHOT</version>
-	<name>Chess Web AI</name>
+    <modules>
+        <module>engine</module>
+    </modules>
+    <name>Chess Web AI</name>
 
 	<properties>
 		<slf4j.version>1.6.6</slf4j.version>

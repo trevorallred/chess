@@ -3,15 +3,12 @@ package chess;
 import java.util.Map;
 import java.util.Set;
 
+import chess.engine.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import chess.pieces.Color;
-import chess.pieces.Piece;
-import chess.pieces.PieceMover;
-import chess.pieces.PieceType;
-import chess.player.Move;
+import chess.engine.PieceMover;
 
 @SuppressWarnings("unchecked")
 public class JsonUtils {

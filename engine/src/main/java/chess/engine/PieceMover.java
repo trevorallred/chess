@@ -1,8 +1,5 @@
-package chess.pieces;
+package chess.engine;
 
-import chess.Board;
-import chess.Location;
-import chess.player.Move;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

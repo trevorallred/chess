@@ -1,10 +1,11 @@
 package chess;
 
+import chess.engine.Board;
 import org.json.simple.JSONObject;
 
-import chess.pieces.Color;
-import chess.pieces.PieceMover;
-import chess.player.Move;
+import chess.engine.Color;
+import chess.engine.PieceMover;
+import chess.engine.Move;
 import chess.player.ai.Player;
 
 public class GameController {

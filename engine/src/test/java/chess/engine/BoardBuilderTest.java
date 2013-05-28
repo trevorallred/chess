@@ -1,7 +1,9 @@
-package chess;
+package chess.engine;
 
 import static org.junit.Assert.assertEquals;
 
+import chess.engine.Board;
+import chess.engine.BoardBuilder;
 import org.junit.Test;
 
 public class BoardBuilderTest {

@@ -1,5 +1,7 @@
-package chess;
+package chess.engine;
 
+import chess.engine.File;
+import chess.engine.Location;
 import org.junit.Assert;
 import org.junit.Test;
 

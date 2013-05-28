@@ -6,10 +6,10 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 
-import chess.BoardBuilder;
-import chess.Location;
-import chess.pieces.Color;
-import chess.player.Move;
+import chess.engine.BoardBuilder;
+import chess.engine.Location;
+import chess.engine.Color;
+import chess.engine.Move;
 
 public class PlayerTest {
 

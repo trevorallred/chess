@@ -1,3 +1,3 @@
 # Chess AI
-by Trevor Allred
+by chess.engine.Trevor Allred
 

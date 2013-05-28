@@ -6,12 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import chess.Board;
-import chess.Location;
-import chess.pieces.Color;
-import chess.pieces.Piece;
-import chess.pieces.PieceMover;
-import chess.player.Move;
+import chess.engine.Board;
+import chess.engine.Location;
+import chess.engine.Color;
+import chess.engine.Piece;
+import chess.engine.PieceMover;
+import chess.engine.Move;
 
 public class Player {
 

@@ -1,17 +1,12 @@
-package chess.pieces;
+package chess.engine;
 
 import java.util.Set;
 
+import chess.engine.*;
 import junit.framework.Assert;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import chess.Board;
-import chess.BoardBuilder;
-import chess.Location;
-import chess.player.Move;
 
 public class PieceMoverTest {
 
