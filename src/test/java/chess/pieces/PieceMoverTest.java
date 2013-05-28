@@ -28,21 +28,25 @@ public class PieceMoverTest {
 
 	@Test
 	public void testPawn() throws Exception {
-		builder.addWhite("Pb2");
+		builder.addWhite("Pb2,Ka2");
 		assertNextMoves("b2", 2);
 	}
 
 	@Test
-	@Ignore
 	public void testCheck() throws Exception {
 		builder.addWhite("Ka1");
 		builder.addBlack("Qf2");
-		builder.getBoard().log();
-		// TODO
 		assertNextMoves("a1", 1);
 	}
 
-	@Test
+    @Test
+    public void testCheckMate() throws Exception {
+        builder.addWhite("Ka1");
+        builder.addBlack("Ra8,Rb8");
+        assertNextMoves("a1", 0);
+    }
+
+    @Test
 	public void testKnight() throws Exception {
 		builder.addWhite("Nd4");
 		assertNextMoves("d4", 8);
@@ -79,7 +83,7 @@ public class PieceMoverTest {
 	}
 
 	private void assertNextMoves(String location, int expectedMoves) {
-		Set<Location> nextMoves = mover.getNextMoves(getPieceAtLocation(location));
+		Set<Location> nextMoves = mover.getNextMovesNotResultingInCheckmate(getPieceAtLocation(location));
 		Assert.assertEquals(expectedMoves, nextMoves.size());
 	}
 

@@ -8,8 +8,14 @@
 	<div id="board"></div>
 	<div id="score">
 		<button id="startGame">Start New Game</button>
-		<h1>ScoreBoard</h1>
-		<div></div>
+        <div>
+            <label>Round:</label>
+            <div id="round">0</div>
+        </div>
+        <div>
+            <label>Turn:</label>
+            <div id="turn"></div>
+        </div>
 	</div>
 	<script src="chess.js" type="text/javascript"></script>
 </body>

@@ -19,6 +19,7 @@ public class GameController {
 		opponent = new Player(Color.Black);
 		try {
 			board = JsonUtils.fromJson(json);
+			// TODO Should we try to check if the move is valid here? PieceMover.canPieceMoveTo()
 			mover = new PieceMover(board);
 			opponentTurn();
 		} catch (Exception e) {

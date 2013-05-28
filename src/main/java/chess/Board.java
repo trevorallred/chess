@@ -38,7 +38,7 @@ public class Board {
 				return piece;
 			}
 		}
-		logger.info("For some reason, the {} king doesn't exist", color);
+		logger.debug("For some reason, the {} king doesn't exist", color);
 		return null;
 	}
 
@@ -51,6 +51,6 @@ public class Board {
 	}
 
 	public void log() {
-		logger.debug(BoardPrinter.print(this));
+		logger.info(BoardPrinter.print(this));
 	}
 }
